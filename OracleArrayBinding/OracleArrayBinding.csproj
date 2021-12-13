@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <Title>OracleArrayBinding</Title>
+        <Description>C# Wrapper for Array Bindings (Oracle)</Description>
+        <PackageDescription>C# Wrapper for Array Bindings (Oracle)</PackageDescription>
+        <PackageProjectUrl>https://github.com/illumen/OracleArrayBinding</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/illumen/OracleArrayBinding</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Authors>Daniel Idén</Authors>
+        <Version>1.0.0</Version>
+        <Company>Illumen</Company>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.41" />
+    </ItemGroup>
+
+</Project>
