@@ -64,6 +64,34 @@ public class ArrayBinding : IArrayBinding
         }
     }
 
+    public void Clear(bool clearDataOnly = true, bool clearStaticRows = false)
+    {
+        if (clearDataOnly)
+        {
+            foreach (DictionaryEntry parameter in Parameters)
+            {
+                if (parameter.Value == null)
+                {
+                    continue;
+                }
+
+                ((List<object>) parameter.Value).Clear();
+            }
+        }
+        else
+        {
+            Parameters.Clear();
+            ParameterTypes.Clear();
+        }
+
+        if (clearStaticRows)
+        {
+            _staticRows.Clear();
+        }
+
+        _isCommandPrepared = false;
+    }
+
     private string GenerateQueryString()
     {
         var count = 0;
@@ -239,7 +267,7 @@ public class ArrayBinding : IArrayBinding
     public void AddRow(IEnumerable<object> values)
     {
         var colEnumerator = Parameters.Keys.GetEnumerator();
-        using var valEnumerator = values.GetEnumerator();
+        var valEnumerator = values.GetEnumerator();
 
         if (Parameters.Keys.Count != values.Count())
         {
