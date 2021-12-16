@@ -70,7 +70,7 @@ public class ArrayBinding : IArrayBinding
         {
             foreach (DictionaryEntry parameter in Parameters)
             {
-                if (parameter.Value == null)
+                if (parameter.Value is null)
                 {
                     continue;
                 }
@@ -138,6 +138,24 @@ public class ArrayBinding : IArrayBinding
         foreach (var (key, value) in _staticRows)
         {
             Parameters.Add(key, Enumerable.Repeat(value, count.Value));
+        }
+    }
+
+    public void SetRow(string column, List<object> values)
+    {
+        SetRows(new Dictionary<string, List<object>> {{column, values}});
+    }
+
+    public void SetRows(Dictionary<string, List<object>> rows)
+    {
+        foreach (var (key, value) in rows)
+        {
+            if (!Parameters.Contains(key))
+            {
+                throw new ArgumentException($"Parameter {key} is not defined in the parameters list");
+            }
+
+            Parameters[key] = value;
         }
     }
 
