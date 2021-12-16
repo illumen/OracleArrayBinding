@@ -56,6 +56,16 @@ public class ArrayBinding : IArrayBinding
         CheckParameters();
     }
 
+    public void AddValue(string column, object value)
+    {
+        if (!Parameters.Contains(column))
+        {
+            throw new ArgumentException($"Parameter {column} is not defined in the parameters list");
+        }
+
+        (Parameters[column] as List<object>)?.Add(value);
+    }
+
     protected void CheckParameters()
     {
         if (Parameters is null || Parameters.Count == 0)
