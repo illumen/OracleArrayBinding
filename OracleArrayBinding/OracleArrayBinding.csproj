@@ -11,7 +11,7 @@
         <RepositoryUrl>https://github.com/illumen/OracleArrayBinding</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <Authors>Daniel Idén</Authors>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <Company>Illumen</Company>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>

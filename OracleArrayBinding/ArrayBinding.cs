@@ -56,50 +56,12 @@ public class ArrayBinding : IArrayBinding
         CheckParameters();
     }
 
-    public void AddValue(string column, object value)
-    {
-        if (!Parameters.Contains(column))
-        {
-            throw new ArgumentException($"Parameter {column} is not defined in the parameters list");
-        }
-
-        (Parameters[column] as List<object>)?.Add(value);
-    }
-
     protected void CheckParameters()
     {
         if (Parameters is null || Parameters.Count == 0)
         {
             throw new ArgumentException("No parameters specified");
         }
-    }
-
-    public void Clear(bool clearDataOnly = true, bool clearStaticRows = false)
-    {
-        if (clearDataOnly)
-        {
-            foreach (DictionaryEntry parameter in Parameters)
-            {
-                if (parameter.Value is null)
-                {
-                    continue;
-                }
-
-                ((List<object>) parameter.Value).Clear();
-            }
-        }
-        else
-        {
-            Parameters.Clear();
-            ParameterTypes.Clear();
-        }
-
-        if (clearStaticRows)
-        {
-            _staticRows.Clear();
-        }
-
-        _isCommandPrepared = false;
     }
 
     private string GenerateQueryString()
@@ -151,24 +113,6 @@ public class ArrayBinding : IArrayBinding
         }
     }
 
-    public void SetRow(string column, List<object> values)
-    {
-        SetRows(new Dictionary<string, List<object>> {{column, values}});
-    }
-
-    public void SetRows(Dictionary<string, List<object>> rows)
-    {
-        foreach (var (key, value) in rows)
-        {
-            if (!Parameters.Contains(key))
-            {
-                throw new ArgumentException($"Parameter {key} is not defined in the parameters list");
-            }
-
-            Parameters[key] = value;
-        }
-    }
-
     protected void SetTableName(string tableName)
     {
         if (tableName is null || string.IsNullOrEmpty(tableName))
@@ -196,6 +140,62 @@ public class ArrayBinding : IArrayBinding
             {
                 throw new ArgumentException($"The number of rows does not match ({entry.Key} - {entryCount}/{count})");
             }
+        }
+    }
+
+    public void AddValue(string column, object value)
+    {
+        if (!Parameters.Contains(column))
+        {
+            throw new ArgumentException($"Parameter {column} is not defined in the parameters list");
+        }
+
+        (Parameters[column] as List<object>)?.Add(value);
+    }
+
+    public void Clear(bool clearDataOnly = true, bool clearStaticRows = false)
+    {
+        if (clearDataOnly)
+        {
+            foreach (DictionaryEntry parameter in Parameters)
+            {
+                if (parameter.Value is null)
+                {
+                    continue;
+                }
+
+                ((List<object>) parameter.Value).Clear();
+            }
+        }
+        else
+        {
+            Parameters.Clear();
+            ParameterTypes.Clear();
+        }
+
+        if (clearStaticRows)
+        {
+            _staticRows.Clear();
+        }
+
+        _isCommandPrepared = false;
+    }
+
+    public void SetRow(string column, List<object> values)
+    {
+        SetRows(new Dictionary<string, List<object>> {{column, values}});
+    }
+
+    public void SetRows(Dictionary<string, List<object>> rows)
+    {
+        foreach (var (key, value) in rows)
+        {
+            if (!Parameters.Contains(key))
+            {
+                throw new ArgumentException($"Parameter {key} is not defined in the parameters list");
+            }
+
+            Parameters[key] = value;
         }
     }
 
