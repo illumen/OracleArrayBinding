@@ -240,8 +240,9 @@ public class ArrayBinding : IArrayBinding
 
             _command.Parameters.Add(new OracleParameter
             {
-                ParameterName = columnName.ToLowerInvariant(), OracleDbType = ParameterTypes[columnName],
-                Value = entry.Value as List<object>
+                ParameterName = columnName.ToLowerInvariant(),
+                OracleDbType = ParameterTypes[columnName],
+                Value = (entry.Value as List<object>)?.ToArray() ?? Array.Empty<object>()
             });
         }
 
