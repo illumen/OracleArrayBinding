@@ -87,7 +87,7 @@ public class ArrayBinding : IArrayBinding
                 $":{parameter.Key.ToString()?.ToLowerInvariant()}{(count < Parameters.Count ? ", " : string.Empty)}");
         }
 
-        return columns + " " + values + ")";
+        return columns + ") " + values + ")";
     }
 
     private void ProcessStaticRows()
@@ -333,13 +333,9 @@ public class ArrayBinding : IArrayBinding
 public class ArrayBinding<TUnderlyingClass> : ArrayBinding, IArrayBinding<TUnderlyingClass>
     where TUnderlyingClass : new()
 {
-    private TUnderlyingClass _underlyingType;
-
-    public ArrayBinding(string? tableName = null, HashSet<string>? ignored = null)
+    public ArrayBinding(string tableName, HashSet<string>? ignored = null)
     {
-        _underlyingType = new TUnderlyingClass();
-
-        SetTableName(tableName ?? nameof(_underlyingType).ToUpperInvariant());
+        SetTableName(tableName.ToUpperInvariant());
         var parameters = Utils.GetColumnsWithTypes<TUnderlyingClass>(ignored);
 
         foreach (var (key, type) in parameters)
