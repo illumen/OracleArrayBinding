@@ -20,7 +20,7 @@ public static class Utils
                 continue;
             }
 
-            if (ignored != null && ignored.Contains(property.Name))
+            if (ignored?.Contains(property.Name) ?? false)
             {
                 continue;
             }

@@ -296,7 +296,7 @@ public class ArrayBinding : IArrayBinding
     public void AddRow(IEnumerable<object> values)
     {
         var colEnumerator = Parameters.Keys.GetEnumerator();
-        var valEnumerator = values.GetEnumerator();
+        using var valEnumerator = values.GetEnumerator();
 
         if (Parameters.Keys.Count != values.Count())
         {
@@ -333,13 +333,19 @@ public class ArrayBinding : IArrayBinding
 public class ArrayBinding<TUnderlyingClass> : ArrayBinding, IArrayBinding<TUnderlyingClass>
     where TUnderlyingClass : new()
 {
-    public ArrayBinding(string tableName, HashSet<string>? ignored = null)
+    public ArrayBinding(string tableName, IEnumerable<string>? ignored = null)
     {
         SetTableName(tableName.ToUpperInvariant());
-        var parameters = Utils.GetColumnsWithTypes<TUnderlyingClass>(ignored);
+        var ignoredColumns = ignored?.Select(x => x.ToUpperInvariant()).ToHashSet();
+        var parameters = Utils.GetColumnsWithTypes<TUnderlyingClass>(ignoredColumns);
 
         foreach (var (key, type) in parameters)
         {
+            if (ignoredColumns?.Contains(key.ToUpperInvariant()) ?? false)
+            {
+                continue;
+            }
+            
             Parameters.Add(key, new List<object>());
             ParameterTypes.Add(key, type);
         }
