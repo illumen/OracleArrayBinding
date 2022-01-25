@@ -93,7 +93,7 @@ public class ArrayBinding : IArrayBinding
     private void ProcessStaticRows()
     {
         int? count = 0;
-        
+
         foreach (DictionaryEntry parameter in Parameters)
         {
             count = (parameter.Value as List<object>)?.Count;
@@ -110,7 +110,7 @@ public class ArrayBinding : IArrayBinding
 
         foreach (var (key, value) in _staticRows)
         {
-            Parameters[key] = Enumerable.Repeat(value, count.Value).ToArray();
+            Parameters[key] = Enumerable.Repeat(value, count.Value).ToList<object>();
         }
     }
 
@@ -346,7 +346,7 @@ public class ArrayBinding<TUnderlyingClass> : ArrayBinding, IArrayBinding<TUnder
             {
                 continue;
             }
-            
+
             Parameters.Add(key, new List<object>());
             ParameterTypes.Add(key, type);
         }
