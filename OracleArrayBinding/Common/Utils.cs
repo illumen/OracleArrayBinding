@@ -85,7 +85,7 @@ public static class Utils
             TypeCode.Empty => throw new Exception("Couldn't translate type code " + typeCode),
             TypeCode.Object => throw new Exception("Couldn't translate type code " + typeCode),
             TypeCode.DBNull => throw new Exception("Couldn't translate type code " + typeCode),
-            TypeCode.Boolean => OracleDbType.Boolean,
+            TypeCode.Boolean => OracleDbType.Int16,
             TypeCode.Char => OracleDbType.NChar,
             TypeCode.SByte => OracleDbType.Byte,
             TypeCode.Byte => OracleDbType.Byte,
