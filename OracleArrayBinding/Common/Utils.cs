@@ -10,30 +10,24 @@ public static class Utils
         where TUnderlyingClass : new()
     {
         var columns = new Dictionary<string, OracleDbType>();
-        var underlying = new TUnderlyingClass();
+        var underlyingClass = new TUnderlyingClass();
+        var underlyingType = underlyingClass.GetType();
+        var properties = underlyingType.GetProperties();
 
-        foreach (var property in underlying.GetType().GetProperties())
+        foreach (var property in properties)
         {
-            var isVirtual = IsVirtual(property);
-            if (isVirtual.HasValue && isVirtual.Value)
+            if (IsVirtual(property) || (ignored?.Contains(property.Name) ?? false))
             {
                 continue;
             }
 
-            if (ignored?.Contains(property.Name) ?? false)
-            {
-                continue;
-            }
-
-            var propType = GetUnderlyingType(property.PropertyType);
-
-            columns.Add(property.Name, Translate(Type.GetTypeCode(propType)));
+            columns.Add(property.Name, Translate(Type.GetTypeCode(GetUnderlyingType(property.PropertyType))));
         }
 
         return columns;
     }
 
-    public static Type GetUnderlyingType(Type type)
+    private static Type GetUnderlyingType(Type type)
     {
         if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
         {
@@ -45,31 +39,14 @@ public static class Utils
             : type;
     }
 
-    public static bool? IsVirtual(PropertyInfo prop)
+    private static bool IsVirtual(PropertyInfo prop)
     {
         if (prop == null)
         {
             throw new ArgumentNullException(nameof(prop));
         }
 
-        bool? found = null;
-
-        foreach (var method in prop.GetAccessors())
-        {
-            if (found.HasValue)
-            {
-                if (found.Value != method.IsVirtual)
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                found = method.IsVirtual;
-            }
-        }
-
-        return found;
+        return prop.GetAccessors().Any(method => method.IsVirtual);
     }
 
     public static OracleDbType Translate(Type type)

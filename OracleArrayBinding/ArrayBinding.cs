@@ -110,7 +110,7 @@ public class ArrayBinding : IArrayBinding
 
         foreach (var (key, value) in _staticRows)
         {
-            Parameters[key] = Enumerable.Repeat(value, count.Value).ToList<object>();
+            Parameters[key] = Enumerable.Repeat(value, count.Value).ToList();
         }
     }
 
